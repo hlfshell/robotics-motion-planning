@@ -97,6 +97,52 @@ while true
     % Visit each neighbor of the current node and update the map, distances
     % and parent tables appropriately.
     
+    for i_change = -1:1
+        %edge of map protections
+        if i + i_change < 1 || i + i_change > nrows
+           continue 
+        end
+        
+        for j_change = -1:1
+            % Edge of Map Protections
+           if j + j_change < 1 || j + j_change > ncols
+              continue 
+           end
+           
+           %ignore no change whatsoever
+           if j_change == 0 & i_change == 0
+              continue 
+           end
+           
+           % We don't allow vertical movement, so don't allow
+           % any change where neither i_change or j_change is not
+           % 0
+           if i_change ~= 0 && j_change ~= 0
+              continue 
+           end
+           
+           new_i = i + i_change;
+           new_j = j + j_change;
+           % Is it an open space?
+           if map(new_i, new_j) ~= 2 && map(new_i, new_j) ~= 3 && map(new_i, new_j) ~= 5
+              % check to see if the distance from the start is 
+              % shorter than what we last recorded for the item
+              if distanceFromStart(new_i, new_j) > min_dist + 1
+                  % If so, let's update the map to make it on the list
+                  map(new_i, new_j) = 4;
+                  parent(new_i, new_j) = current;
+                  distanceFromStart(new_i, new_j) = min_dist + 1;
+              end
+           end
+           
+        end
+        
+    end
+    
+    if map(current) == 3
+        numExpanded = numExpanded + 1; 
+    end
+%     pause(0.1)
     
     
     
