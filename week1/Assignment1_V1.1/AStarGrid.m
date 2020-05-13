@@ -111,6 +111,50 @@ while true
     % entries in the map, f, g and parent arrays
     %
     
+    numExpanded = numExpanded + 1;
+    
+    for i_change = -1:1
+        %edge of map protections
+        if i + i_change < 1 || i + i_change > nrows
+           continue 
+        end
+        
+        for j_change = -1:1
+            % Edge of Map Protections
+           if j + j_change < 1 || j + j_change > ncols
+              continue 
+           end
+           
+           %ignore no change whatsoever
+           if j_change == 0 & i_change == 0
+              continue 
+           end
+           
+           % We don't allow vertical movement, so don't allow
+           % any change where neither i_change or j_change is not
+           % 0
+           if i_change ~= 0 && j_change ~= 0
+              continue 
+           end
+           
+           new_i = i + i_change;
+           new_j = j + j_change;
+           % Is it an open space?
+           if map(new_i, new_j) ~= 2 && map(new_i, new_j) ~= 3 && map(new_i, new_j) ~= 5
+               
+               if g(new_i, new_j) > g(current) + 1
+                   g(new_i, new_j) = g(current) + 1;
+                   f(new_i, new_j) = g(new_i, new_j) + H(new_i, new_j);
+                   parent(new_i, new_j) = current;
+               end
+               
+           end
+           
+        end
+        
+    end
+    
+    pause(0.1)
     
     
     
