@@ -15,7 +15,7 @@ function [route,numExpanded] = AStarGrid (input_map, start_coords, dest_coords)
 % set up color map for display
 % 1 - white - clear cell
 % 2 - black - obstacle
-% 3 - red = visited
+% % 3 - red = visited
 % 4 - blue  - on list
 % 5 - green - start
 % 6 - yellow - destination
