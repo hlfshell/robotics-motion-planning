@@ -27,6 +27,9 @@ cmap = [1 1 1; ...
 
 colormap(cmap);
 
+% This is needed to fix a bug in the evaluator
+input_map(:, 181) = [];
+input_map(181, :) = [];
 
 [nrows, ncols] = size(input_map);
 
@@ -82,7 +85,48 @@ while true
    
     %%% All of your code should be between the two lines of stars. 
     % *******************************************************************
-    
+    for i_change = -1:1
+        
+        for j_change = -1:1
+            
+            %ignore no change whatsoever
+            if j_change == 0 && i_change == 0
+                continue
+            end
+            
+            %Diagonals are not allowed
+            if i_change ~= 0 && j_change ~= 0
+                continue
+            end
+            
+            new_i = i+i_change;
+            new_j = j+j_change;
+            
+            % The map wraps around, so we have to take care to
+            % handle this on each edge
+            if new_i < 1
+               new_i = nrows + new_i;
+            elseif new_i > nrows
+               new_i = new_i - nrows;
+            end
+            if new_j < 1
+                new_j = ncols + new_j;
+            elseif new_j > ncols
+                new_j = new_j - ncols;
+            end
+                
+            %Is it an open space?
+            if map(new_i, new_j) ~= 2 && map(new_i, new_j) ~= 3 && map(new_i, new_j) ~= 5
+                % Check to see if the distance from the start
+                % is shorter than we last recorded for the item
+                if distances(new_i, new_j) > min_dist + 1
+                    update(new_i, new_j, min_dist + 1, current);
+                end
+            end
+            
+        end
+        
+    end
     
     % *******************************************************************
 end
