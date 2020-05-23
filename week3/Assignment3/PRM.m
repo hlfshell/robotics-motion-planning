@@ -65,7 +65,27 @@ for i = 2:nsamples
     % edge_lengths and nedges variables accordingly.
     %
     
-    fprintf (1, 'nsamples = %d, nedges = %d\n', i, nedges);
+    %First sort the distances so we can fine the closest neighbors
+    %closest represents an array of all distances ordered by closest first
+    %index is an array of the original index value of the above list
+    [closest, index] = sort(distances, 'ascend');
+    
+    %Now we consider the closest k items
+    for item = 1:min(k, i-1)
+        
+        %Use LocalPlanner to determine if the current point 
+        %can have a straight line drawn to our currently
+        %considered item
+        linePossible = LocalPlanner(x, samples(:, index(item)));
+        
+        if linePossible
+            %Increment the number of edges
+            nedges = nedges + 1;
+            %Update the edges to represent the new closest rankings
+            edges(nedges, :) = [i, index(item)];
+            edge_lengths(nedges) = closest(item);
+        end
+    end
    
 end
 
